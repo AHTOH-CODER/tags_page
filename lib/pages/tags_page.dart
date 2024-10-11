@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:test1/database/database_helper.dart';
+
 
 class TagsPage extends StatefulWidget {
   const TagsPage({super.key});
@@ -10,6 +12,7 @@ class TagsPage extends StatefulWidget {
 
 class _TagsPageState extends State<TagsPage> {
   final Set<String> _selectedTags = {};
+  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,7 @@ class _TagsPageState extends State<TagsPage> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {_printSavedTags();},
             child: const Text('Теги'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellow,
@@ -101,7 +104,7 @@ class _TagsPageState extends State<TagsPage> {
             ),
             const SizedBox(height: 40),
             ElevatedButton(
-              onPressed: _selectedTags.isNotEmpty ? () {} : null,
+              onPressed: _selectedTags.isNotEmpty ? _saveSelectedTags : null,
               child: const Text('Подтвердить'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow,
@@ -123,10 +126,12 @@ class _TagsPageState extends State<TagsPage> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          if (_selectedTags.contains(imagePath)) {
-            _selectedTags.remove(imagePath);
+          if (_selectedTags.contains(text)) {
+            _selectedTags.remove(text);
+            print(text);
           } else {
-            _selectedTags.add(imagePath);
+            _selectedTags.add(text);
+            print(text);
           }
         });
       },
@@ -138,7 +143,7 @@ class _TagsPageState extends State<TagsPage> {
             decoration: BoxDecoration(
               color: Colors.yellow,
               shape: BoxShape.circle,
-              border: _selectedTags.contains(imagePath)
+              border: _selectedTags.contains(text)
                   ? Border.all(color: Colors.orange, width: 3) 
                   : null,
             ),
@@ -150,7 +155,7 @@ class _TagsPageState extends State<TagsPage> {
             ),
           ),
           Text(
-            text, // Отображение текста
+            text,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 14,
@@ -159,5 +164,19 @@ class _TagsPageState extends State<TagsPage> {
         ],
       ),
     );
+  }
+  void _saveSelectedTags() async {
+    for (String tag in _selectedTags) {
+      await _dbHelper.addTag(tag);  
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Теги успешно сохранены!')),
+    );
+  }
+  void _printSavedTags() async { 
+    List<Map<String, dynamic>> savedTags = await _dbHelper.getTags(); 
+    for (var tag in savedTags) { 
+      print('Сохранённый тег: ${tag['tag']}'); 
+    } 
   }
 }
