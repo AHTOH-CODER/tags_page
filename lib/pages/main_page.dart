@@ -5,6 +5,7 @@ import 'package:test1/pages/tags_page.dart';
 import 'package:test1/pages/player_page.dart'; 
 import 'package:flutter/services.dart' show rootBundle; 
 import 'package:dio/dio.dart'; 
+import 'package:test1/components/get_data.dart';
  
 class MainPage extends StatefulWidget { 
   @override 
@@ -22,8 +23,7 @@ class _MainPageState extends State<MainPage> {
   } 
  
   Future<void> loadAssets() async { 
-    final String response = await rootBundle.loadString('assets/test.json'); 
-    final List<dynamic> data = json.decode(response); 
+    final List<dynamic> data = searchVideo('dart') as List; 
  
     setState(() { 
       items = data; 
@@ -112,7 +112,7 @@ class _MainPageState extends State<MainPage> {
                           child: ClipRRect( 
                             borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)), 
                             child: Image.network(
-                              items[index]['thumb'][1],
+                              items[index]['thumb'][0],
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Container(

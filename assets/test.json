@@ -1,7 +1,7 @@
 [{
     "id": "6lZwvbOI0UU",
     "title": "Что такое Flutter и Dart?",
-    "thumb": "https://i.ytimg.com/vi/mCfXlP1Kwnw/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=%5C%5Cu0026rs=AOn4CLClMDDIswlj58axyp7VNcZTHgHoww",
+    "thumb": ["https://i.ytimg.com/vi/mCfXlP1Kwnw/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=%5C%5Cu0026rs=AOn4CLClMDDIswlj58axyp7VNcZTHgHoww"],
     "simple_data": "Что такое Flutter и Dart? Автор: Merion Academy 14/xa0787 просмотров 5 дней назад 12 минут 58 секунд"
 }, {
     "id": "Jxw6FaA0j3I",

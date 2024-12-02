@@ -63,52 +63,21 @@ class PlayerPage extends StatelessWidget {
       ),
 
 
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Image.network(
-              link,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey, // Цвет заглушки
-                  child: Center(child: Text('Ошибка загрузки изображения')),
-                );
-              }
-            ),
 
-            PlayerWidget(player: player),
 
-            ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Читалка'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellow,
-              foregroundColor: Colors.black
-            )
-          ),
 
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              simpleData,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        )
-      ),
+
+
+
+
+      // body: (
+        
+      // ),
+
+
+
+
+
 
 
       bottomNavigationBar: BottomAppBar(
