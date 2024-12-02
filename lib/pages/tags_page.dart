@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/database/database_helper.dart';
-
+import 'package:test1/pages/main_page.dart';
 
 class TagsPage extends StatefulWidget {
   const TagsPage({super.key});
@@ -23,7 +23,7 @@ class _TagsPageState extends State<TagsPage> {
         ),
         actions: [
           Container (
-            width: 360,
+            width: 350,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField(
@@ -51,8 +51,10 @@ class _TagsPageState extends State<TagsPage> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {_printSavedTags();},
-            child: const Text('Теги'),
+            onPressed: () {
+              Navigator.pop(context,);
+            },
+            child: const Text('Назад'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellow,
               foregroundColor: Colors.black
@@ -102,7 +104,7 @@ class _TagsPageState extends State<TagsPage> {
                 _buildTagItem('assets/chemistry.svg', 'Химия'),
               ],
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _selectedTags.isNotEmpty ? _saveSelectedTags : null,
               child: const Text('Подтвердить'),
@@ -117,6 +119,37 @@ class _TagsPageState extends State<TagsPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(
+              width: 100,
+              height: 50,
+              child: IconButton(
+                icon: Icon(Icons.home, color: Colors.grey),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage()),
+                    );
+                  },
+              ),
+            ),
+            SizedBox(
+              width: 100, 
+              height: 50,
+              child: IconButton(
+                icon: Icon(Icons.history, color: Colors.grey),
+                onPressed: () {
+                  // ...
+                },
+              ),
+            ),
+          ],
+        ),
+        color: Colors.black,
       ),
       backgroundColor: const Color.fromARGB(234, 0, 0, 0),
     );

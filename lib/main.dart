@@ -1,13 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:test1/pages/tags_page.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:test1/pages/main_page.dart';
 
 void main() {
-  // if (Platform.isWindows || Platform.isLinux || Platform.isMacOS || Platform.isAndroid) {
-  //   sqfliteFfiInit();
-  //   databaseFactory = databaseFactoryFfi;
-  // }
   runApp(MyApp());
 }
 
@@ -21,6 +17,6 @@ class MyApp extends StatelessWidget {
 class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TagsPage();
+    return MainPage();
   }
 }
