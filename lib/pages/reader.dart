@@ -1,19 +1,10 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/pages/main_page.dart';
-import 'package:test1/components/player.dart';
 
-class PlayerPage extends StatelessWidget {
-  final String title;
-  final String link;
-  final String simpleData;
-
-  PlayerPage({required this.title, required this.link, required this.simpleData});
-
+class ReaderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    late AudioPlayer player = AudioPlayer();
     return Scaffold(
       appBar: AppBar(
         leading: SvgPicture.asset(

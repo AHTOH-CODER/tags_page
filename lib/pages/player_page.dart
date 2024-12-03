@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/pages/main_page.dart';
 import 'package:test1/components/player.dart';
+import 'package:test1/pages/reader.dart';
+
 
 class PlayerPage extends StatelessWidget {
   final String title;
@@ -63,52 +65,79 @@ class PlayerPage extends StatelessWidget {
       ),
 
 
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Image.network(
-              link,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey, // Цвет заглушки
-                  child: Center(child: Text('Ошибка загрузки изображения')),
-                );
-              }
-            ),
-
-            PlayerWidget(player: player),
-
-            ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Читалка'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellow,
-              foregroundColor: Colors.black
-            )
+body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Image.network(
+                          link,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: Colors.grey, // Цвет заглушки
+                              child: Center(child: Text('Ошибка загрузки изображения')),
+                            );
+                          },
+                        ),
+                      ),
+                      PlayerWidget(player: player), // Ваш виджет плеера
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        simpleData,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      //////////////////////////////
+                    },
+                    child: const Text('Скачать аудио'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow,
+                      foregroundColor: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push( 
+                        context, 
+                        MaterialPageRoute(builder: (context) => ReaderPage()), 
+                      ); 
+                    },
+                    child: const Text('Читалка'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow,
+                      foregroundColor: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
+        ),
 
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              simpleData,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        )
-      ),
 
 
       bottomNavigationBar: BottomAppBar(
