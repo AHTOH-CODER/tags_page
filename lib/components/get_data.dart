@@ -1,42 +1,44 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-
-Future<void> searchVideo(String videoTitle) async {
-  final String url = 'http://217.12.40.218:5001/search_video';
-
-  try {
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({'title': videoTitle}),
-    );
-
-    if (response.statusCode == 200) {
-      // Successful response
-      try {
-        final data = json.decode(response.body);
-        final directory = await getApplicationDocumentsDirectory();
-        final file = File('${directory.path}/search_results.json');
-
-        await file.writeAsString(json.encode(data));
-        print('Данные сохранены в ${file.path}');
-      } catch (jsonError) {
-        print('Ошибка разбора JSON: $jsonError');
-        // Handle invalid JSON response from server
-      }
-    } else {
-      // Error response from server
-      print('Ошибка сервера: ${response.statusCode} - ${response.body}');
-      // Handle error response (e.g., show a message to the user)
-    }
-  } catch (httpError) {
-    print('Ошибка HTTP запроса: $httpError');
-    // Handle network errors (e.g., no internet connection)
-    // Show an appropriate message to the user
-  }
+import 'dart:convert'; 
+import 'dart:io'; // Импортируем пакет для работы с файлами 
+import 'package:http/http.dart' as http; 
+ 
+Future<void> searchVideo(String videoTitle) async { 
+    final String url = 'http://217.12.40.218:5001/search_video'; 
+ 
+    // Выполняем POST-запрос с заголовками и телом запроса 
+    final response = await http.post( 
+      Uri.parse(url), 
+      headers: { 
+        'Content-Type': 'application/json', 
+      }, 
+      body: json.encode({'title': videoTitle}), 
+    ); 
+ 
+    // Проверяем статус ответа 
+    if (response.statusCode == 200) { 
+    // Успешный ответ, обрабатываем данные 
+    final data = json.decode(response.body); 
+    print('Response data: $data'); 
+     
+    // Проверяем, если данные представляют список, и сохраняем каждый элемент, если это список 
+    if (data is List) { 
+      await saveDataToFile(data); 
+    } else { 
+      print('Получены данные не в ожидаемом формате'); 
+    } 
+} else { 
+    // Обработка ошибок 
+    print('Error: ${response.statusCode} - ${response.body}'); 
+} 
+} 
+Future<void> saveDataToFile(List<dynamic> data) async { 
+    final file = File('assets/test.json'); // Указываем имя файла 
+    // Сохраняем данные в файле в формате JSON 
+    await file.writeAsString(json.encode(data)); 
+    print('Данные успешно сохранены в response_data.json'); 
+} 
+ 
+void main() { 
+    // Пример вызова функции с названием видео 
+    searchVideo('python'); 
 }
