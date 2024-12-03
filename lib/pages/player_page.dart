@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/pages/main_page.dart';
 import 'package:test1/components/player.dart';
-import 'package:test1/pages/reader.dart';
+import 'package:test1/pages/reader_page.dart';
 
 
 class PlayerPage extends StatelessWidget {

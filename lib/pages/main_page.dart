@@ -23,7 +23,7 @@ class _MainPageState extends State<MainPage> {
   } 
  
   Future<void> loadAssets() async { 
-    // final List<dynamic> data = searchVideo('dart') as List; 
+    searchVideo('cat'); 
     final String response = await rootBundle.loadString('assets/test.json'); 
     final List<dynamic> data = json.decode(response); 
  
