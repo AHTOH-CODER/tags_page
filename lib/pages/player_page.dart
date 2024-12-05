@@ -11,8 +11,9 @@ class PlayerPage extends StatelessWidget {
   final String title;
   final String link;
   final String simpleData;
+  final String id;
 
-  PlayerPage({required this.title, required this.link, required this.simpleData});
+  PlayerPage({required this.title, required this.link, required this.simpleData, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class PlayerPage extends StatelessWidget {
         ),
         actions: [
           Container (
-            width: 350,
+            width: 250,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField(
@@ -86,13 +87,13 @@ body: Padding(
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Container(
-                              color: Colors.grey, // Цвет заглушки
+                              color: Colors.grey,
                               child: Center(child: Text('Ошибка загрузки изображения')),
                             );
                           },
                         ),
                       ),
-                      PlayerWidget(player: player), // Ваш виджет плеера
+                      PlayerWidget(player: player),
                       Text(
                         title,
                         style: TextStyle(
@@ -117,7 +118,7 @@ body: Padding(
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      //////////////////////////////
+                      download_audio(idToUrl(id), id);
                     },
                     child: const Text('Скачать аудио'),
                     style: ElevatedButton.styleFrom(
@@ -128,9 +129,9 @@ body: Padding(
                   const SizedBox(width: 6),
                   ElevatedButton(
                     onPressed: () {
-                      //////////////////////////////
+                      download_video(idToUrl(id), id);
                     },
-                    child: const Text('Скачать аудио'),
+                    child: const Text('Скачать видео'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.yellow,
                       foregroundColor: Colors.black,
@@ -141,7 +142,11 @@ body: Padding(
                     onPressed: () {
                       Navigator.push( 
                         context, 
-                        MaterialPageRoute(builder: (context) => ReaderPage()), 
+                        MaterialPageRoute( 
+                          builder: (context) => ReaderPage( 
+                            id: id,
+                          ), 
+                        ), 
                       ); 
                     },
                     child: const Text('Читалка'),
@@ -155,7 +160,6 @@ body: Padding(
             ],
           ),
         ),
-
 
 
       bottomNavigationBar: BottomAppBar(

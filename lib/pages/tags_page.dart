@@ -15,7 +15,6 @@ class TagsPage extends StatefulWidget {
 
 class _TagsPageState extends State<TagsPage> {
   final Set<String> _selectedTags = {};
-  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class _TagsPageState extends State<TagsPage> {
         ),
         actions: [
           Container (
-            width: 350,
+            width: 250,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField(
@@ -73,62 +72,74 @@ class _TagsPageState extends State<TagsPage> {
         backgroundColor: Colors.black,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              'Самые популярные теги',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-            const Text(
-              'Просто выберите что понравится вам!',
-               style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 20),
-            GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 16.0,
-              mainAxisSpacing: 16.0,
-              children: [
-                _buildTagItem('assets/car.svg', 'Автомобили', 'Cars'),
-                _buildTagItem('assets/airplane.svg', 'Авиация', 'Aviation'),
-                _buildTagItem('assets/businessman.svg', 'Бизнес', 'Business'),
-                _buildTagItem('assets/food.svg', 'Готовка', 'Cooking'),
-                _buildTagItem('assets/puppy.svg', 'Животные', 'Animals'),
-                _buildTagItem('assets/history.svg', 'История', 'History'),
-                _buildTagItem('assets/space.svg', 'Космос', 'Space'),
-                _buildTagItem('assets/music.svg', 'Музыка', 'Music'),
-                _buildTagItem('assets/programming.svg', 'Программирование', 'Programming'),
-                _buildTagItem('assets/sports.svg', 'Спорт', 'Sport'),
-                _buildTagItem('assets/physics.svg', 'Физика', 'Physics'),
-                _buildTagItem('assets/chemistry.svg', 'Химия', 'Chemistry'),
-              ],
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _selectedTags.isNotEmpty ? _saveSelectedTags : null,
-              child: const Text('Подтвердить'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellow,
-                foregroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Самые популярные теги',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Text(
+                        'Просто выберите что понравится вам!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      GridView.count(
+                        crossAxisCount: 3,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisSpacing: 0.0,
+                        mainAxisSpacing: 30.0,
+                        children: [
+                          _buildTagItem('assets/car.svg', 'Автомобили', 'Cars'),
+                          _buildTagItem('assets/airplane.svg', 'Авиация', 'Aviation'),
+                          _buildTagItem('assets/businessman.svg', 'Бизнес', 'Business'),
+                          _buildTagItem('assets/food.svg', 'Готовка', 'Cooking'),
+                          _buildTagItem('assets/puppy.svg', 'Животные', 'Animals'),
+                          _buildTagItem('assets/history.svg', 'История', 'History'),
+                          _buildTagItem('assets/space.svg', 'Космос', 'Space'),
+                          _buildTagItem('assets/music.svg', 'Музыка', 'Music'),
+                          _buildTagItem('assets/programming.svg', 'Программирование', 'Programming'),
+                          _buildTagItem('assets/sports.svg', 'Спорт', 'Sport'),
+                          _buildTagItem('assets/physics.svg', 'Физика', 'Physics'),
+                          _buildTagItem('assets/chemistry.svg', 'Химия', 'Chemistry'),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              Row (
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: _selectedTags.isNotEmpty ? _saveSelectedTags : null,
+                    child: const Text('Подтвердить'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow,
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

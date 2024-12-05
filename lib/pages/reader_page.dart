@@ -1,9 +1,30 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/components/get_data.dart';
 import 'package:test1/pages/main_page.dart';
 
-class ReaderPage extends StatelessWidget {
+class ReaderPage extends StatefulWidget { 
+  final String id;
+  ReaderPage({required this.id});
+
+  @override 
+  _ReaderPageState createState() => _ReaderPageState(); 
+} 
+ 
+class _ReaderPageState extends State<ReaderPage> { 
+  String _statusMessage = ''; // Сообщение о статусе 
+  TextEditingController _controller = TextEditingController(); // Контроллер для TextField 
+  File? _currentFile; // Ссылка на текущий файл
+
+  @override
+  void initState() {
+    super.initState();
+    // Инициализируем filePath с использованием id из виджета
+    late final String filePath = 'downloaded/text/${widget.id}.txt';
+    _loadFile(filePath);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +34,7 @@ class ReaderPage extends StatelessWidget {
         ),
         actions: [
           Container (
-            width: 350,
+            width: 250,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField(
@@ -61,21 +82,40 @@ class ReaderPage extends StatelessWidget {
       ),
 
 
-
-
-
-
-
-
-
-      // body: (
-        
-      // ),
-
-
-
-
-
+      body: Padding( 
+        padding: const EdgeInsets.all(16.0), 
+        child: Column( 
+          children: [ 
+            SizedBox(height: 20), 
+            Text( 
+              _statusMessage, 
+              style: TextStyle(fontSize: 16, color: Colors.yellow), 
+            ), 
+            SizedBox(height: 20), 
+            Expanded( 
+              child: TextField( 
+                controller: _controller, 
+                maxLines: null, // Позволяет использовать несколько строк 
+                decoration: InputDecoration( 
+                  border: OutlineInputBorder(), 
+                  hintText: 'Редактируйте содержимое файла...', 
+                  hintStyle: TextStyle(color: Colors.grey), // Цвет подсказки (hint) белый
+                ), 
+                style: TextStyle(fontSize: 16, color: Colors.white), // Белый текст в TextField
+              ), 
+            ), 
+            SizedBox(height: 20), 
+            ElevatedButton( 
+              onPressed: _saveFile, 
+              child: Text('Сохранить изменения'), 
+              style: ElevatedButton.styleFrom( 
+              backgroundColor: Colors.yellow, 
+              foregroundColor: Colors.black, 
+            ), 
+            ), 
+          ], 
+        ), 
+      ), 
 
 
       bottomNavigationBar: BottomAppBar(
@@ -110,4 +150,61 @@ class ReaderPage extends StatelessWidget {
       backgroundColor: const Color.fromARGB(234, 0, 0, 0),
     );
   }
+
+  Future<void> _loadFile(String filePath) async {
+    File file = File(filePath); // Указываем путь к файлу
+    if (await file.exists()) { 
+      setState(() {
+        _currentFile = file; // Сохраняем текущий файл
+      });
+      await _readTxtFile(file); // Читаем содержимое файла
+    } else {
+      setState(() {
+        _statusMessage = 'Загрузите аудио для использования читалки';
+      });
+    }
+  }
+
+  Future<void> _readTxtFile(File file) async { 
+    try { 
+      // Читаем файл как текст
+      String fileContent = await file.readAsString(); 
+      setState(() { 
+        _controller.text = fileContent; // Помещаем содержимое в контроллер
+        _statusMessage = '';  // Очищаем сообщение об ошибке
+      }); 
+    } catch (e) { 
+      setState(() { 
+        _controller.text = ''; 
+        _statusMessage = 'Ошибка при чтении файла: $e'; 
+      }); 
+    } 
+  } 
+
+  Future<void> _saveFile() async { 
+    if (_currentFile == null) { 
+      setState(() { 
+        _statusMessage = 'Файл не загружен'; 
+      }); 
+      return; 
+    } 
+
+    String newContent = _controller.text; // Получаем измененный текст 
+
+    try { 
+      // Сохраняем текст в тот же файл
+      await _currentFile!.writeAsString(newContent); 
+      setState(() { 
+        _statusMessage = 'Изменения успешно сохранены'; 
+      }); 
+      await Future.delayed(Duration(seconds: 3));
+      setState(() {
+        _statusMessage = '';
+      });
+    } catch (e) { 
+      setState(() { 
+        _statusMessage = 'Ошибка при сохранении файла: $e'; 
+      }); 
+    } 
+  } 
 }

@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
     final String response = await rootBundle.loadString('assets/test.json'); 
     final List<dynamic> data = json.decode(response); 
  
-    setState(() { 
+    setState(() {
       items = data; 
     }); 
   } 
@@ -41,11 +41,11 @@ class _MainPageState extends State<MainPage> {
     return Scaffold( 
       appBar: AppBar( 
         leading: SvgPicture.asset( 
-          'assets/logo.svg', 
+          'assets/logo.svg',
         ), 
         actions: [ 
           Container( 
-            width: 360, 
+            width: 250, 
             child: Padding( 
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField( 
@@ -108,6 +108,7 @@ class _MainPageState extends State<MainPage> {
                           title: items[index]['title'], 
                           link: items[index]['thumb'][0], // Передаем первую ссылку 
                           simpleData: items[index]['simple_data'], 
+                          id: items[index]['id'],
                         ), 
                       ), 
                     ); 
