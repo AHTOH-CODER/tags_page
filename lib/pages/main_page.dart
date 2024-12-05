@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/pages/tags_page.dart'; 
 import 'package:test1/pages/player_page.dart'; 
 import 'package:flutter/services.dart' show rootBundle; 
-import 'package:dio/dio.dart'; 
 import 'package:test1/components/get_data.dart';
  
 class MainPage extends StatefulWidget { 
@@ -14,16 +13,21 @@ class MainPage extends StatefulWidget {
  
 class _MainPageState extends State<MainPage> { 
   List<dynamic> items = []; 
-  final Dio dio = Dio(); 
  
-  @override 
-  void initState() { 
-    super.initState(); 
-    loadAssets(); 
-  } 
+   @override
+  void initState() {
+    loadAssets();
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    
+    super.didChangeDependencies();
+    loadAssets();
+  }
  
   Future<void> loadAssets() async { 
-    searchVideo('python'); 
     final String response = await rootBundle.loadString('assets/test.json'); 
     final List<dynamic> data = json.decode(response); 
  
@@ -31,7 +35,7 @@ class _MainPageState extends State<MainPage> {
       items = data; 
     }); 
   } 
- 
+
   @override 
   Widget build(BuildContext context) { 
     return Scaffold( 
@@ -45,7 +49,13 @@ class _MainPageState extends State<MainPage> {
             child: Padding( 
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField( 
-                onChanged: (value) {}, 
+                onSubmitted: (value) async {
+                  searchVideo(value);
+                  Navigator.push( 
+                    context, 
+                    MaterialPageRoute(builder: (context) => MainPage()), 
+                  ); 
+                }, 
                 decoration: InputDecoration( 
                   hintText: 'Поиск', 
                   hintStyle: const TextStyle( 

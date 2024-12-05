@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:test1/components/get_data.dart';
 import 'package:test1/pages/main_page.dart';
 
 class ReaderPage extends StatelessWidget {
@@ -16,7 +17,13 @@ class ReaderPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField(
-                onChanged: (value) {},
+                onSubmitted: (value) async {
+                  searchVideo(value);
+                  Navigator.push( 
+                    context, 
+                    MaterialPageRoute(builder: (context) => MainPage()), 
+                  ); 
+                },
                 decoration: InputDecoration(
                   hintText: 'Поиск',
                   hintStyle: const TextStyle(

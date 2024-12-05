@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:test1/components/get_data.dart';
 import 'package:test1/pages/main_page.dart';
 import 'package:test1/components/player.dart';
 import 'package:test1/pages/reader_page.dart';
@@ -27,7 +28,13 @@ class PlayerPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField(
-                onChanged: (value) {},
+                onSubmitted: (value) async {
+                  searchVideo(value);
+                  Navigator.push( 
+                    context, 
+                    MaterialPageRoute(builder: (context) => MainPage()), 
+                  ); 
+                },
                 decoration: InputDecoration(
                   hintText: 'Поиск',
                   hintStyle: const TextStyle(
@@ -108,6 +115,17 @@ body: Padding(
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      //////////////////////////////
+                    },
+                    child: const Text('Скачать аудио'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow,
+                      foregroundColor: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
                   ElevatedButton(
                     onPressed: () {
                       //////////////////////////////

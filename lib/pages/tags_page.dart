@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/database/database_helper.dart';
 import 'package:test1/pages/main_page.dart';
+import 'package:test1/components/get_data.dart';
 
 class TagsPage extends StatefulWidget {
   const TagsPage({super.key});
@@ -27,7 +30,13 @@ class _TagsPageState extends State<TagsPage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField(
-                onChanged: (value) {},
+                onSubmitted: (value) async {
+                  searchVideo(value);
+                  Navigator.push( 
+                    context, 
+                    MaterialPageRoute(builder: (context) => MainPage()), 
+                  );  
+                },
                 decoration: InputDecoration(
                   hintText: 'Поиск',
                   hintStyle: const TextStyle(
@@ -90,18 +99,18 @@ class _TagsPageState extends State<TagsPage> {
               crossAxisSpacing: 16.0,
               mainAxisSpacing: 16.0,
               children: [
-                _buildTagItem('assets/car.svg', 'Автомобили'),
-                _buildTagItem('assets/airplane.svg', 'Авиация'),
-                _buildTagItem('assets/businessman.svg', 'Бизнес'),
-                _buildTagItem('assets/food.svg', 'Готовка'),
-                _buildTagItem('assets/puppy.svg', 'Животные'),
-                _buildTagItem('assets/history.svg', 'История'),
-                _buildTagItem('assets/space.svg', 'Космос'),
-                _buildTagItem('assets/music.svg', 'Музыка'),
-                _buildTagItem('assets/programming.svg', 'Программирование'),
-                _buildTagItem('assets/sports.svg', 'Спорт'),
-                _buildTagItem('assets/physics.svg', 'Физика'),
-                _buildTagItem('assets/chemistry.svg', 'Химия'),
+                _buildTagItem('assets/car.svg', 'Автомобили', 'Cars'),
+                _buildTagItem('assets/airplane.svg', 'Авиация', 'Aviation'),
+                _buildTagItem('assets/businessman.svg', 'Бизнес', 'Business'),
+                _buildTagItem('assets/food.svg', 'Готовка', 'Cooking'),
+                _buildTagItem('assets/puppy.svg', 'Животные', 'Animals'),
+                _buildTagItem('assets/history.svg', 'История', 'History'),
+                _buildTagItem('assets/space.svg', 'Космос', 'Space'),
+                _buildTagItem('assets/music.svg', 'Музыка', 'Music'),
+                _buildTagItem('assets/programming.svg', 'Программирование', 'Programming'),
+                _buildTagItem('assets/sports.svg', 'Спорт', 'Sport'),
+                _buildTagItem('assets/physics.svg', 'Физика', 'Physics'),
+                _buildTagItem('assets/chemistry.svg', 'Химия', 'Chemistry'),
               ],
             ),
             const SizedBox(height: 20),
@@ -155,16 +164,14 @@ class _TagsPageState extends State<TagsPage> {
     );
   }
 
-  Widget _buildTagItem(String imagePath, String text) {
+  Widget _buildTagItem(String imagePath, String text, String teg) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          if (_selectedTags.contains(text)) {
-            _selectedTags.remove(text);
-            print(text);
+          if (_selectedTags.contains(teg)) {
+            _selectedTags.remove(teg);
           } else {
-            _selectedTags.add(text);
-            print(text);
+            _selectedTags.add(teg);
           }
         });
       },
@@ -176,7 +183,7 @@ class _TagsPageState extends State<TagsPage> {
             decoration: BoxDecoration(
               color: Colors.yellow,
               shape: BoxShape.circle,
-              border: _selectedTags.contains(text)
+              border: _selectedTags.contains(teg)
                   ? Border.all(color: Colors.orange, width: 3) 
                   : null,
             ),
@@ -199,17 +206,11 @@ class _TagsPageState extends State<TagsPage> {
     );
   }
   void _saveSelectedTags() async {
-    for (String tag in _selectedTags) {
-      await _dbHelper.addTag(tag);  
-    }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Теги успешно сохранены!')),
+    String tagsString = _selectedTags.join(' ');
+    searchVideo(tagsString);
+    Navigator.push( 
+      context, 
+      MaterialPageRoute(builder: (context) => MainPage()),
     );
-  }
-  void _printSavedTags() async { 
-    List<Map<String, dynamic>> savedTags = await _dbHelper.getTags(); 
-    for (var tag in savedTags) { 
-      print('Сохранённый тег: ${tag['tag']}'); 
-    } 
   }
 }

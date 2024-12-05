@@ -37,8 +37,3 @@ Future<void> saveDataToFile(List<dynamic> data) async {
     await file.writeAsString(json.encode(data)); 
     print('Данные успешно сохранены в response_data.json'); 
 } 
- 
-void main() { 
-    // Пример вызова функции с названием видео 
-    searchVideo('python'); 
-}
