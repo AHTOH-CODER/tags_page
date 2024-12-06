@@ -6,7 +6,7 @@ import 'package:test1/pages/main_page.dart';
 import 'package:test1/pages/reader_page.dart';
 import 'package:test1/pages/history_page.dart';
 import 'package:url_launcher/url_launcher.dart'; 
-
+import 'package:path_provider/path_provider.dart';
 
 class PlayerPage extends StatefulWidget {
   final String title;
@@ -112,8 +112,9 @@ class _PlayerPageState extends State<PlayerPage> {
                     Column(
                       children: [
                         ElevatedButton(
-                          onPressed: () async { 
-                            final filePath = 'downloaded/audios/${widget.id}.mp3';
+                          onPressed: () async {
+                            Directory? appDocDir = await getDownloadsDirectory();
+                            final filePath = '${appDocDir?.path.replaceAll('\\', '/')}/${widget.id}.mp3';
                             if (await File(filePath).exists()) { 
                               final uri = Uri.file(filePath); 
                               if (await canLaunch(uri.toString())) { 
@@ -133,7 +134,8 @@ class _PlayerPageState extends State<PlayerPage> {
                         SizedBox(height: 10,),
                         ElevatedButton(
                           onPressed: () async { 
-                            final filePath = 'downloaded/audios/${widget.id}.mp4';
+                            Directory? appDocDir = await getDownloadsDirectory();
+                            final filePath = '${appDocDir?.path.replaceAll('\\', '/')}/${widget.id}.mp4';
                             if (await File(filePath).exists()) { 
                               final uri = Uri.file(filePath); 
                               if (await canLaunch(uri.toString())) { 

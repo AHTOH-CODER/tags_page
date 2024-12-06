@@ -1,7 +1,8 @@
 import 'dart:convert'; 
 import 'dart:io'; // Импортируем пакет для работы с файлами 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; 
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart'; 
  
 Future<void> searchVideo(String videoTitle) async { 
     final String url = 'http://217.12.40.218:5001/search_video'; 
@@ -53,10 +54,11 @@ void download_audio(String videoUrl, String id) async {
     final HttpClientResponse httpResponse = await response.close(); 
  
     if (httpResponse.statusCode == 200) { 
-      final file = File('downloaded/audios/${id}.mp3'); 
+      Directory? appDocDir = await getDownloadsDirectory();
+      final file = File('${appDocDir?.path.replaceAll('\\', '/')}/$id.mp3'); 
       final sink = file.openWrite(); 
  
-      await for (var chunk in httpResponse) { 
+      await for (var chunk in httpResponse) {
         sink.add(chunk); 
       } 
  
@@ -84,7 +86,8 @@ void download_video(String videoUrl, String id) async {
     final HttpClientResponse httpResponse = await response.close(); 
  
     if (httpResponse.statusCode == 200) { 
-      final file = File('downloaded/videos/${id}.mp4'); 
+      Directory? appDocDir = await getDownloadsDirectory();
+      final file = File('${appDocDir?.path.replaceAll('\\', '/')}/$id.mp4');
       final sink = file.openWrite(); 
  
       await for (var chunk in httpResponse) { 
@@ -125,7 +128,7 @@ void download_text(String videoUrl, String id) async {
     final HttpClientResponse httpResponse = await response.close();  
   
     if (httpResponse.statusCode == 200) {  
-      final file = File('downloaded/texts/${id}.txt');  
+      final file = File('downloaded/texts/${id}.txt');
       final sink = file.openWrite();  
   
       await for (var chunk in httpResponse) {  
