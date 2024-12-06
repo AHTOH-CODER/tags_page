@@ -150,6 +150,7 @@ class _PlayerPageState extends State<PlayerPage> {
                               backgroundColor: Colors.yellow,
                               foregroundColor: Colors.black),
                         ),
+                        SizedBox(height: 10,),
                       ]
                     ),
                     Text(

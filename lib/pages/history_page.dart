@@ -143,15 +143,19 @@ class _HistoryPageState extends State<HistoryPage> {
                           padding: const EdgeInsets.all(8.0), 
                           child: Text( 
                             items[index]['title'], 
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), 
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white), 
                           ), 
                         ), 
                         Padding( 
                           padding: const EdgeInsets.symmetric(horizontal: 8.0), 
-                          child: Text(items[index]['simple_data']), 
+                          child: Text(
+                            items[index]['simple_data'],
+                            style: TextStyle(color: Colors.white), 
+                          ), 
                         ), 
                       ], 
                     ), 
+                    color: Colors.grey[800],
                   ), 
                 ); 
               }, 
