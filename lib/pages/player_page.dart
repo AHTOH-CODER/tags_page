@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/components/get_data.dart';
 import 'package:test1/pages/main_page.dart';
-import 'package:test1/components/playerNE.dart';
 import 'package:test1/pages/reader_page.dart';
 import 'package:test1/pages/history_page.dart';
+import 'package:url_launcher/url_launcher.dart'; 
 
 
 class PlayerPage extends StatefulWidget {
@@ -23,7 +22,6 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
   late List<Map<String, dynamic>> history_videos;
-  late AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {
@@ -34,40 +32,7 @@ class _PlayerPageState extends State<PlayerPage> {
       'thumb': widget.link,
       'title': widget.title,
     }];
-
-    // Create the audio player.
-    player = AudioPlayer();
-
-    // Set the release mode to keep the source after playback has completed.
-    player.setReleaseMode(ReleaseMode.stop);
-
-    // Start the player as soon as the app is displayed.
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        // Получаем полный путь к файлу
-        final filePath = 'downloaded/audios/2ydCvkxuNm4.mp3';
-
-        // Устанавливаем источник аудио
-        final file = File(filePath);
-        if (await file.exists()) {
-          await player.setSource(DeviceFileSource(filePath));
-          print('Аудио установлено: $filePath');
-          await player.resume();
-        } else {
-          print('Файл не найден по пути: $filePath');
-        }
-      } catch (e) {
-        print('Ошибка установки источника аудио: $e');
-      };
-    });
   }
-
-  @override
-  void dispose() {
-    player.dispose(); // Освобождение ресурсов плеера
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,7 +108,50 @@ class _PlayerPageState extends State<PlayerPage> {
                         },
                       ),
                     ),
-                    PlayerWidget(player: player),
+                    SizedBox(height: 10,),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async { 
+                            final filePath = 'downloaded/audios/${widget.id}.mp3';
+                            if (await File(filePath).exists()) { 
+                              final uri = Uri.file(filePath); 
+                              if (await canLaunch(uri.toString())) { 
+                                await launch(uri.toString()); 
+                              } else { 
+                                showSnackBar(context, 'Не удалось запустить приложение для открытия файла'); 
+                              } 
+                            } else { 
+                              showSnackBar(context, 'Файл не найден'); 
+                            } 
+                          },
+                          child: const Text('Воспроизвести аудио'),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.yellow,
+                              foregroundColor: Colors.black),
+                        ),
+                        SizedBox(height: 10,),
+                        ElevatedButton(
+                          onPressed: () async { 
+                            final filePath = 'downloaded/audios/${widget.id}.mp4';
+                            if (await File(filePath).exists()) { 
+                              final uri = Uri.file(filePath); 
+                              if (await canLaunch(uri.toString())) { 
+                                await launch(uri.toString()); 
+                              } else { 
+                                showSnackBar(context, 'Не удалось запустить приложение для открытия файла'); 
+                              } 
+                            } else { 
+                              showSnackBar(context, 'Файл не найден'); 
+                            } 
+                          },
+                          child: const Text('Воспроизвести видео'),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.yellow,
+                              foregroundColor: Colors.black),
+                        ),
+                      ]
+                    ),
                     Text(
                       widget.title,
                       style: TextStyle(
