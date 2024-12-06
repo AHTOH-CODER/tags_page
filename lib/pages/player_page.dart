@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,8 +34,22 @@ class _PlayerPageState extends State<PlayerPage> {
 
     // Start the player as soon as the app is displayed.
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await player.setSource(AssetSource('downloaded/audios/2ydCvkxuNm4.mp3'));
-      await player.resume();
+      try {
+        // Получаем полный путь к файлу
+        final filePath = 'downloaded/audios/2ydCvkxuNm4.mp3';
+
+        // Устанавливаем источник аудио
+        final file = File(filePath);
+        if (await file.exists()) {
+          await player.setSource(DeviceFileSource(filePath));
+          print('Аудио установлено: $filePath');
+          await player.resume();
+        } else {
+          print('Файл не найден по пути: $filePath');
+        }
+      } catch (e) {
+        print('Ошибка установки источника аудио: $e');
+      };
     });
   }
 
