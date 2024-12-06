@@ -1,5 +1,6 @@
 import 'dart:convert'; 
 import 'dart:io'; // Импортируем пакет для работы с файлами 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; 
  
 Future<void> searchVideo(String videoTitle) async { 
@@ -107,4 +108,77 @@ String idToUrl(String id) {
   }
 
   return "https://www.youtube.com/watch?v=$id";
+}
+  
+void download_text(String videoUrl, String id) async {  
+  final String url = 'http://217.12.40.218:5001/transcribe_audio';  
+  final Map<String, String> data = {  
+    'video_url': videoUrl,  
+    'video_id': id 
+  };  
+  
+  try {  
+    final response = await HttpClient().postUrl(Uri.parse(url))  
+      ..headers.contentType = ContentType.json  
+      ..write(jsonEncode(data));  
+  
+    final HttpClientResponse httpResponse = await response.close();  
+  
+    if (httpResponse.statusCode == 200) {  
+      final file = File('downloaded/texts/${id}.txt');  
+      final sink = file.openWrite();  
+  
+      await for (var chunk in httpResponse) {  
+        sink.add(chunk);  
+      }  
+  
+      await sink.close();  
+      print("мяу ${id}.txt");  
+    } else {  
+      print("не мяу: ${httpResponse.statusCode}");  
+    }  
+  } catch (e) {  
+    print("не мяу: $e");  
+  }  
+}
+
+
+
+Future<void> saveVideosToJson(List<Map<String, dynamic>> newVideos) async {
+  // Определяем путь к JSON файлу
+  final filePath = 'assets/history.json';
+
+  // Проверяем, существует ли файл
+  final file = File(filePath);
+  
+  // Если файл существует, читаем его содержимое
+  List<Map<String, dynamic>> existingVideos = [];
+  if (await file.exists()) {
+    final jsonString = await file.readAsString();
+    existingVideos = List<Map<String, dynamic>>.from(jsonDecode(jsonString));
+  }
+
+  // Обновляем существующие видео
+  for (var newVideo in newVideos) {
+    // Предполагаем, что 'id' является уникальным полем для идентификации видео
+    existingVideos.removeWhere((video) => video['id'] == newVideo['id']);
+    // Добавляем новое видео
+    existingVideos.add(newVideo);
+  }
+
+  // Конвертируем обновленный список видео в формат JSON 
+  final updatedJsonString = jsonEncode(existingVideos);
+
+  // Записываем обновленную строку JSON в файл
+  await file.writeAsString(updatedJsonString);
+
+  print('Сохранено в истории');
+}
+
+void showSnackBar(BuildContext context, String message) {
+  final snackBar = SnackBar(
+    content: Text(message),
+    duration: Duration(seconds: 2), // Продолжительность отображения
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

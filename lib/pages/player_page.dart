@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/components/get_data.dart';
 import 'package:test1/pages/main_page.dart';
-import 'package:test1/components/player.dart';
+import 'package:test1/components/playerNE.dart';
 import 'package:test1/pages/reader_page.dart';
+import 'package:test1/pages/history_page.dart';
+
 
 class PlayerPage extends StatefulWidget {
   final String title;
@@ -20,11 +22,18 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
+  late List<Map<String, dynamic>> history_videos;
   late AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
+    history_videos = [{
+      'id': widget.id,
+      'simple_data': widget.simpleData,
+      'thumb': widget.link,
+      'title': widget.title,
+    }];
 
     // Create the audio player.
     player = AudioPlayer();
@@ -158,8 +167,12 @@ class _PlayerPageState extends State<PlayerPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     download_audio(idToUrl(widget.id), widget.id);
+                    showSnackBar(context, 'Это может занять некоторое время');
+                    await Future.delayed(Duration(seconds: 3));
+                    showSnackBar(context, 'Аудио успешно установлено');
+                    saveVideosToJson(history_videos);
                   },
                   child: const Text('Скачать аудио'),
                   style: ElevatedButton.styleFrom(
@@ -169,8 +182,12 @@ class _PlayerPageState extends State<PlayerPage> {
                 ),
                 const SizedBox(width: 6),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     download_video(idToUrl(widget.id), widget.id);
+                    showSnackBar(context, 'Это может занять некоторое время');
+                    await Future.delayed(Duration(seconds: 3));
+                    showSnackBar(context, 'Видео успешно установлено');
+                    saveVideosToJson(history_videos);
                   },
                   child: const Text('Скачать видео'),
                   style: ElevatedButton.styleFrom(
@@ -180,7 +197,11 @@ class _PlayerPageState extends State<PlayerPage> {
                 ),
                 const SizedBox(width: 6),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    download_text(idToUrl(widget.id), widget.id);
+                    showSnackBar(context, 'Это может занять некоторое время');
+                    await Future.delayed(Duration(seconds: 3));
+                    saveVideosToJson(history_videos);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -223,7 +244,12 @@ class _PlayerPageState extends State<PlayerPage> {
               height: 50,
               child: IconButton(
                 icon: Icon(Icons.history, color: Colors.grey),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HistoryPage())
+                  );
+                },
               ),
             ),
           ],

@@ -5,6 +5,7 @@ import 'package:test1/pages/tags_page.dart';
 import 'package:test1/pages/player_page.dart'; 
 import 'package:flutter/services.dart' show rootBundle; 
 import 'package:test1/components/get_data.dart';
+import 'package:test1/pages/history_page.dart';
  
 class MainPage extends StatefulWidget { 
   @override 
@@ -163,9 +164,7 @@ class _MainPageState extends State<MainPage> {
               height: 50, 
               child: IconButton( 
                 icon: Icon(Icons.home, color: Colors.yellow), 
-                onPressed: () { 
-                  // ... 
-                }, 
+                onPressed: () {}, 
               ), 
             ), 
             SizedBox( 
@@ -173,7 +172,12 @@ class _MainPageState extends State<MainPage> {
               height: 50, 
               child: IconButton( 
                 icon: Icon(Icons.history, color: Colors.grey), 
-                onPressed: () {}, 
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HistoryPage())
+                  );
+                }, 
               ), 
             ), 
           ], 

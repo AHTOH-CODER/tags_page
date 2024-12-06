@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test1/pages/main_page.dart';
 import 'package:test1/components/get_data.dart';
+import 'package:test1/pages/history_page.dart';
 
 class TagsPage extends StatefulWidget {
   const TagsPage({super.key});
@@ -159,7 +160,10 @@ class _TagsPageState extends State<TagsPage> {
               child: IconButton(
                 icon: Icon(Icons.history, color: Colors.grey),
                 onPressed: () {
-                  // ...
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HistoryPage())
+                  );
                 },
               ),
             ),

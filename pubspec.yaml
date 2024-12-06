@@ -68,7 +68,7 @@ flutter:
   - assets/
   - downloaded/audios/
   - downloaded/videos/
-  - downloaded/text/
+  - downloaded/texts/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
