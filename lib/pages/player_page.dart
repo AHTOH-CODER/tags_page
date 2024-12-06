@@ -19,12 +19,23 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  late AudioPlayer player;
+  late AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
-    player = AudioPlayer(); // Инициализация плеера
+
+    // Create the audio player.
+    player = AudioPlayer();
+
+    // Set the release mode to keep the source after playback has completed.
+    player.setReleaseMode(ReleaseMode.stop);
+
+    // Start the player as soon as the app is displayed.
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await player.setSource(AssetSource('downloaded/audios/2ydCvkxuNm4.mp3'));
+      await player.resume();
+    });
   }
 
   @override
@@ -108,7 +119,7 @@ class _PlayerPageState extends State<PlayerPage> {
                         },
                       ),
                     ),
-                    PlayerWidget(player: player, id: widget.id),
+                    PlayerWidget(player: player),
                     Text(
                       widget.title,
                       style: TextStyle(
