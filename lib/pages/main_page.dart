@@ -91,6 +91,7 @@ class _MainPageState extends State<MainPage> {
               foregroundColor: Colors.black, 
             ), 
           ), 
+          SizedBox(width: 10,)
         ], 
         backgroundColor: Colors.black, 
       ), 
@@ -179,7 +180,7 @@ class _MainPageState extends State<MainPage> {
         ), 
         color: Colors.black, 
       ), 
-      backgroundColor: const Color.fromARGB(234, 0, 0, 0), 
+      backgroundColor: const Color.fromARGB(234, 14, 14, 14), 
     ); 
   } 
 }

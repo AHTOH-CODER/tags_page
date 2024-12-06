@@ -77,6 +77,7 @@ class _ReaderPageState extends State<ReaderPage> {
               foregroundColor: Colors.black
             )
           ),
+          SizedBox(width: 10,)
         ],
         backgroundColor: Colors.black,
       ),
@@ -147,7 +148,7 @@ class _ReaderPageState extends State<ReaderPage> {
         ),
         color: Colors.black,
       ),
-      backgroundColor: const Color.fromARGB(234, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(234, 14, 14, 14),
     );
   }
 

@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:test1/database/database_helper.dart';
 import 'package:test1/pages/main_page.dart';
 import 'package:test1/components/get_data.dart';
 
@@ -68,6 +65,7 @@ class _TagsPageState extends State<TagsPage> {
               foregroundColor: Colors.black
             )
           ),
+          SizedBox(width: 10,)
         ],
         backgroundColor: Colors.black,
       ),
@@ -99,8 +97,6 @@ class _TagsPageState extends State<TagsPage> {
                         crossAxisCount: 3,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        crossAxisSpacing: 0.0,
-                        mainAxisSpacing: 30.0,
                         children: [
                           _buildTagItem('assets/car.svg', 'Автомобили', 'Cars'),
                           _buildTagItem('assets/airplane.svg', 'Авиация', 'Aviation'),
@@ -171,7 +167,7 @@ class _TagsPageState extends State<TagsPage> {
         ),
         color: Colors.black,
       ),
-      backgroundColor: const Color.fromARGB(234, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(234, 14, 14, 14),
     );
   }
 
@@ -189,8 +185,8 @@ class _TagsPageState extends State<TagsPage> {
       child: Column(
         children: [
           Container(
-            width: 120,
-            height: 120,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
               color: Colors.yellow,
               shape: BoxShape.circle,
