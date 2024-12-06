@@ -162,8 +162,8 @@ Future<void> saveVideosToJson(List<Map<String, dynamic>> newVideos) async {
   for (var newVideo in newVideos) {
     // Предполагаем, что 'id' является уникальным полем для идентификации видео
     existingVideos.removeWhere((video) => video['id'] == newVideo['id']);
-    // Добавляем новое видео
-    existingVideos.add(newVideo);
+    // Добавляем новое видео в начало списка
+    existingVideos.insert(0, newVideo);
   }
 
   // Конвертируем обновленный список видео в формат JSON 
