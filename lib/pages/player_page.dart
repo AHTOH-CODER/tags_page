@@ -107,7 +107,7 @@ class _PlayerPageState extends State<PlayerPage> {
                           );
                         },
                       ),
-                    ),
+                    ), 
                     SizedBox(height: 10,),
                     Column(
                       children: [
@@ -174,39 +174,44 @@ class _PlayerPageState extends State<PlayerPage> {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Column(
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    download_audio(idToUrl(widget.id), widget.id);
-                    showSnackBar(context, 'Это может занять некоторое время');
-                    await Future.delayed(Duration(seconds: 3));
-                    showSnackBar(context, 'Аудио успешно установлено');
-                    saveVideosToJson(history_videos);
-                  },
-                  child: const Text('Скачать аудио'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow,
-                    foregroundColor: Colors.black,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        download_audio(idToUrl(widget.id), widget.id);
+                        showSnackBar(context, 'Это может занять некоторое время');
+                        await Future.delayed(Duration(seconds: 3));
+                        showSnackBar(context, 'Аудио успешно установлено');
+                        saveVideosToJson(history_videos);
+                      },
+                      child: const Text('Скачать аудио'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow,
+                        foregroundColor: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    ElevatedButton(
+                      onPressed: () async {
+                        download_video(idToUrl(widget.id), widget.id);
+                        showSnackBar(context, 'Это может занять некоторое время');
+                        await Future.delayed(Duration(seconds: 3));
+                        showSnackBar(context, 'Видео успешно установлено');
+                        saveVideosToJson(history_videos);
+                      },
+                      child: const Text('Скачать видео'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow,
+                        foregroundColor: Colors.black,
+                      ),
+                    ),
+
+                  ],
                 ),
-                const SizedBox(width: 6),
-                ElevatedButton(
-                  onPressed: () async {
-                    download_video(idToUrl(widget.id), widget.id);
-                    showSnackBar(context, 'Это может занять некоторое время');
-                    await Future.delayed(Duration(seconds: 3));
-                    showSnackBar(context, 'Видео успешно установлено');
-                    saveVideosToJson(history_videos);
-                  },
-                  child: const Text('Скачать видео'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow,
-                    foregroundColor: Colors.black,
-                  ),
-                ),
-                const SizedBox(width: 6),
+                const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () async {
                     download_text(idToUrl(widget.id), widget.id);
@@ -228,6 +233,7 @@ class _PlayerPageState extends State<PlayerPage> {
                     foregroundColor: Colors.black,
                   ),
                 ),
+
               ],
             ),
           ],

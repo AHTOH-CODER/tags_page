@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart'; 
  
 Future<void> searchVideo(String videoTitle) async { 
-    final String url = 'http://217.12.40.218:5001/search_video'; 
+    final String url = 'http://217.114.15.37:5001/search_video'; 
  
     // Выполняем POST-запрос с заголовками и телом запроса 
     final response = await http.post( 
@@ -41,7 +41,7 @@ Future<void> saveDataToFile(List<dynamic> data) async {
 } 
 
 void download_audio(String videoUrl, String id) async { 
-  final String url = 'http://217.12.40.218:5001/download_audio'; 
+  final String url = 'http://217.114.15.37:5001/download_audio'; 
   final Map<String, String> data = { 
     'url': videoUrl, 
   }; 
@@ -73,7 +73,7 @@ void download_audio(String videoUrl, String id) async {
 }
 
 void download_video(String videoUrl, String id) async { 
-  final String url = 'http://217.12.40.218:5001/download_video'; 
+  final String url = 'http://217.114.15.37:5001/download_video'; 
   final Map<String, String> data = { 
     'url': videoUrl, 
   }; 
@@ -114,7 +114,7 @@ String idToUrl(String id) {
 }
   
 void download_text(String videoUrl, String id) async {  
-  final String url = 'http://217.12.40.218:5001/transcribe_audio';  
+  final String url = 'http://217.114.15.37:5001/transcribe_audio';  
   final Map<String, String> data = {  
     'video_url': videoUrl,  
     'video_id': id 
