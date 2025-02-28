@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_provider/path_provider.dart'; 
 import 'package:test1/pages/tags_page.dart'; 
 import 'package:test1/pages/player_page.dart'; 
-import 'package:flutter/services.dart' show rootBundle; 
 import 'package:test1/components/get_data.dart';
 import 'package:test1/pages/main_page.dart';
  
