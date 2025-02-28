@@ -1,6 +1,8 @@
-import 'dart:convert'; 
+import 'dart:convert';
+import 'dart:io'; 
 import 'package:flutter/material.dart'; 
-import 'package:flutter_svg/flutter_svg.dart'; 
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path_provider/path_provider.dart'; 
 import 'package:test1/pages/tags_page.dart'; 
 import 'package:test1/pages/player_page.dart'; 
 import 'package:flutter/services.dart' show rootBundle; 
@@ -29,7 +31,9 @@ class _HistoryPageState extends State<HistoryPage> {
   }
  
   Future<void> loadAssets() async { 
-    final String response = await rootBundle.loadString('assets/history.json'); 
+    Directory? appDocDir = await getDownloadsDirectory();
+    final filePath = '${appDocDir?.path.replaceAll('\\', '/')}/history.json';
+    final String response = await File(filePath).readAsString();
     final List<dynamic> data = json.decode(response); 
  
     setState(() {
@@ -52,6 +56,7 @@ class _HistoryPageState extends State<HistoryPage> {
               child: TextField( 
                 onSubmitted: (value) async {
                   searchVideo(value);
+                  await Future.delayed(Duration(seconds: 3));
                   Navigator.push( 
                     context, 
                     MaterialPageRoute(builder: (context) => MainPage()), 

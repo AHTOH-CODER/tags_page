@@ -219,6 +219,7 @@ class _TagsPageState extends State<TagsPage> {
   void _saveSelectedTags() async {
     String tagsString = _selectedTags.join(' ');
     searchVideo(tagsString);
+    await Future.delayed(Duration(seconds: 1));
     Navigator.push( 
       context, 
       MaterialPageRoute(builder: (context) => MainPage()),

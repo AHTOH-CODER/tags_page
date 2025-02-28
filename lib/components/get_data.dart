@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart'; 
  
-Future<void> searchVideo(String videoTitle) async { 
+Future<dynamic> searchVideo(String videoTitle) async { 
     final String url = 'http://217.114.15.37:5001/search_video'; 
  
     // Выполняем POST-запрос с заголовками и телом запроса 
@@ -25,19 +25,22 @@ Future<void> searchVideo(String videoTitle) async {
     // Проверяем, если данные представляют список, и сохраняем каждый элемент, если это список 
     if (data is List) { 
       await saveDataToFile(data); 
+      return data;
     } else { 
       print('Получены данные не в ожидаемом формате'); 
+      return []; // Возвращаем пустой список в случае ошибки
     } 
 } else { 
     // Обработка ошибок 
     print('Error: ${response.statusCode} - ${response.body}'); 
+    return []; // Возвращаем пустой список в случае ошибки
 } 
 } 
 Future<void> saveDataToFile(List<dynamic> data) async { 
-    final file = File('assets/test.json'); // Указываем имя файла 
-    // Сохраняем данные в файле в формате JSON 
-    await file.writeAsString(json.encode(data)); 
-    print('Данные успешно сохранены в test.json'); 
+    Directory? appDocDir = await getDownloadsDirectory();
+    final file = File('${appDocDir?.path.replaceAll('\\', '/')}/test.json');
+    await file.writeAsString(json.encode(data));
+    print('Данные успешно сохранены в test.json');
 } 
 
 void download_audio(String videoUrl, String id) async { 
@@ -119,7 +122,7 @@ void download_text(String videoUrl, String id) async {
     'video_url': videoUrl,  
     'video_id': id 
   };  
-  
+
   try {  
     final response = await HttpClient().postUrl(Uri.parse(url))  
       ..headers.contentType = ContentType.json  
@@ -128,8 +131,9 @@ void download_text(String videoUrl, String id) async {
     final HttpClientResponse httpResponse = await response.close();  
   
     if (httpResponse.statusCode == 200) {  
-      final file = File('downloaded/texts/${id}.txt');
-      final sink = file.openWrite();  
+      Directory? appDocDir = await getDownloadsDirectory();
+      final file = File('${appDocDir?.path.replaceAll('\\', '/')}/$id.txt'); 
+      final sink = file.openWrite();   
   
       await for (var chunk in httpResponse) {  
         sink.add(chunk);  
@@ -149,7 +153,8 @@ void download_text(String videoUrl, String id) async {
 
 Future<void> saveVideosToJson(List<Map<String, dynamic>> newVideos) async {
   // Определяем путь к JSON файлу
-  final filePath = 'assets/history.json';
+  Directory? appDocDir = await getDownloadsDirectory();
+  final filePath = '${appDocDir?.path.replaceAll('\\', '/')}/history.json';
 
   // Проверяем, существует ли файл
   final file = File(filePath);

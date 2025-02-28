@@ -1,6 +1,8 @@
-import 'dart:convert'; 
+import 'dart:convert';
+import 'dart:io'; 
 import 'package:flutter/material.dart'; 
-import 'package:flutter_svg/flutter_svg.dart'; 
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path_provider/path_provider.dart'; 
 import 'package:test1/pages/tags_page.dart'; 
 import 'package:test1/pages/player_page.dart'; 
 import 'package:flutter/services.dart' show rootBundle; 
@@ -15,11 +17,22 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> { 
   List<dynamic> items = []; 
  
-   @override
-  void initState() {
-    loadAssets();
-    super.initState();
+  @override
+void initState() {
+  super.initState();
+  loadAssets(); // Загружаем данные при инициализации
+}
+
+Future<void> load(value) async { 
+  final List<dynamic> data = await searchVideo(value); // Изменено на прямое ожидание списка
+  if (data.isNotEmpty) {
+    await saveDataToFile(data); // Сохраняем данные в файл
   }
+
+  setState(() {
+    items = data; // Обновляем список элементов
+  }); 
+}
 
   @override
   void didChangeDependencies() {
@@ -28,13 +41,16 @@ class _MainPageState extends State<MainPage> {
   }
  
   Future<void> loadAssets() async { 
-    final String response = await rootBundle.loadString('assets/test.json'); 
+    Directory? appDocDir = await getDownloadsDirectory();
+    final filePath = '${appDocDir?.path.replaceAll('\\', '/')}/test.json';
+    final String response = await File(filePath).readAsString();
     final List<dynamic> data = json.decode(response); 
  
     setState(() {
       items = data; 
     }); 
   } 
+
 
   @override 
   Widget build(BuildContext context) { 
@@ -50,11 +66,7 @@ class _MainPageState extends State<MainPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10.0), 
               child: TextField( 
                 onSubmitted: (value) async {
-                  searchVideo(value);
-                  Navigator.push( 
-                    context, 
-                    MaterialPageRoute(builder: (context) => MainPage()), 
-                  ); 
+                  load(value);
                 }, 
                 decoration: InputDecoration( 
                   hintText: 'Поиск', 
@@ -167,7 +179,10 @@ class _MainPageState extends State<MainPage> {
               height: 50, 
               child: IconButton( 
                 icon: Icon(Icons.home, color: Colors.yellow), 
-                onPressed: () {}, 
+                onPressed: () {Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage())
+                  );}, 
               ), 
             ), 
             SizedBox( 

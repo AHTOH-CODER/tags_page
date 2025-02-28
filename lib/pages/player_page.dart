@@ -183,7 +183,7 @@ class _PlayerPageState extends State<PlayerPage> {
                       onPressed: () async {
                         download_audio(idToUrl(widget.id), widget.id);
                         showSnackBar(context, 'Это может занять некоторое время');
-                        await Future.delayed(Duration(seconds: 3));
+                        await Future.delayed(Duration(seconds: 5));
                         showSnackBar(context, 'Аудио успешно установлено');
                         saveVideosToJson(history_videos);
                       },
@@ -198,7 +198,7 @@ class _PlayerPageState extends State<PlayerPage> {
                       onPressed: () async {
                         download_video(idToUrl(widget.id), widget.id);
                         showSnackBar(context, 'Это может занять некоторое время');
-                        await Future.delayed(Duration(seconds: 3));
+                        await Future.delayed(Duration(seconds: 5));
                         showSnackBar(context, 'Видео успешно установлено');
                         saveVideosToJson(history_videos);
                       },
