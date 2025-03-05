@@ -43,7 +43,7 @@ Future<void> saveDataToFile(List<dynamic> data) async {
     print('Данные успешно сохранены в test.json');
 } 
 
-void download_audio(String videoUrl, String id) async { 
+void download_audio(String videoUrl, String id, BuildContext context) async { 
   final String url = 'http://217.114.15.37:5001/download_audio'; 
   final Map<String, String> data = { 
     'url': videoUrl, 
@@ -60,13 +60,14 @@ void download_audio(String videoUrl, String id) async {
       Directory? appDocDir = await getDownloadsDirectory();
       final file = File('${appDocDir?.path.replaceAll('\\', '/')}/$id.mp3'); 
       final sink = file.openWrite(); 
- 
+
       await for (var chunk in httpResponse) {
         sink.add(chunk); 
       } 
  
       await sink.close(); 
       print("мяу downloaded_video.mp3"); 
+      showSnackBar(context, 'Аудио успешно установлено');
     } else { 
       print("не мяу: ${httpResponse.statusCode}"); 
     } 
@@ -75,7 +76,7 @@ void download_audio(String videoUrl, String id) async {
   } 
 }
 
-void download_video(String videoUrl, String id) async { 
+void download_video(String videoUrl, String id, BuildContext context) async { 
   final String url = 'http://217.114.15.37:5001/download_video'; 
   final Map<String, String> data = { 
     'url': videoUrl, 
@@ -99,6 +100,7 @@ void download_video(String videoUrl, String id) async {
  
       await sink.close(); 
       print("мяу downloaded_video.mp4"); 
+      showSnackBar(context, 'Видео успешно установлено');
     } else { 
       print("не мяу: ${httpResponse.statusCode}"); 
     } 
@@ -116,7 +118,7 @@ String idToUrl(String id) {
   return "https://www.youtube.com/watch?v=$id";
 }
   
-void download_text(String videoUrl, String id) async {  
+void download_text(String videoUrl, String id, BuildContext context) async {  
   final String url = 'http://217.114.15.37:5001/transcribe_audio';  
   final Map<String, String> data = {  
     'video_url': videoUrl,  
@@ -124,6 +126,14 @@ void download_text(String videoUrl, String id) async {
   };  
 
   try {  
+    Directory? appDocDir = await getDownloadsDirectory();
+    final file = File('${appDocDir?.path.replaceAll('\\', '/')}/$id.txt'); 
+
+    if (await file.exists()) {
+      showSnackBar(context, 'Файл уже скачан');
+      return;
+    }
+
     final response = await HttpClient().postUrl(Uri.parse(url))  
       ..headers.contentType = ContentType.json  
       ..write(jsonEncode(data));  
@@ -131,8 +141,6 @@ void download_text(String videoUrl, String id) async {
     final HttpClientResponse httpResponse = await response.close();  
   
     if (httpResponse.statusCode == 200) {  
-      Directory? appDocDir = await getDownloadsDirectory();
-      final file = File('${appDocDir?.path.replaceAll('\\', '/')}/$id.txt'); 
       final sink = file.openWrite();   
   
       await for (var chunk in httpResponse) {  
@@ -141,6 +149,7 @@ void download_text(String videoUrl, String id) async {
   
       await sink.close();  
       print("мяу ${id}.txt");  
+      showSnackBar(context, 'Текст успешно установлен');
     } else {  
       print("не мяу: ${httpResponse.statusCode}");  
     }  

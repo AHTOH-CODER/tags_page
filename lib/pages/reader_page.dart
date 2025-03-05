@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:test1/components/get_data.dart';
 import 'package:test1/pages/main_page.dart';
 import 'package:test1/pages/history_page.dart';
@@ -12,7 +13,7 @@ class ReaderPage extends StatefulWidget {
   @override 
   _ReaderPageState createState() => _ReaderPageState(); 
 } 
- 
+
 class _ReaderPageState extends State<ReaderPage> { 
   String _statusMessage = ''; // Сообщение о статусе 
   TextEditingController _controller = TextEditingController(); // Контроллер для TextField 
@@ -21,9 +22,46 @@ class _ReaderPageState extends State<ReaderPage> {
   @override
   void initState() {
     super.initState();
-    // Инициализируем filePath с использованием id из виджета
-    late final String filePath = 'downloaded/texts/${widget.id}.txt';
-    _loadFile(filePath);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _loadFile();
+    });
+  }
+
+  Future<void> _loadFile() async {
+    Directory? appDocDir = await getDownloadsDirectory();
+    final filePath = '${appDocDir?.path.replaceAll('\\', '/')}/${widget.id}.txt';
+    File file = File(filePath); // Указываем путь к файлу
+    if (await file.exists()) { 
+      setState(() {
+        _currentFile = file; // Сохраняем текущий файл
+      });
+      await _readTxtFile(file); // Читаем содержимое файла
+    } else {
+      setState(() {
+        _statusMessage = 'Файл не найден';
+      });
+    }
+  }
+
+  Future<void> _deleteFile() async {
+    if (_currentFile == null) {
+      setState(() {
+        _statusMessage = 'Нет файла для удаления';
+      });
+      return;
+    }
+    try {
+      await _currentFile!.delete();
+      setState(() {
+        _currentFile = null;
+        _controller.clear();
+        _statusMessage = 'Файл успешно удален';
+      });
+    } catch (e) {
+      setState(() {
+        _statusMessage = 'Ошибка при удалении файла: $e';
+      });
+    }
   }
 
   @override
@@ -100,25 +138,37 @@ class _ReaderPageState extends State<ReaderPage> {
                 maxLines: null, // Позволяет использовать несколько строк 
                 decoration: InputDecoration( 
                   border: OutlineInputBorder(), 
-                  // hintText: 'Редактируйте содержимое файла...', 
                   hintStyle: TextStyle(color: Colors.grey), // Цвет подсказки (hint) белый
                 ), 
                 style: TextStyle(fontSize: 16, color: Colors.white), // Белый текст в TextField
               ), 
             ), 
             SizedBox(height: 20), 
-            ElevatedButton( 
-              onPressed: _saveFile, 
-              child: Text('Сохранить изменения'), 
-              style: ElevatedButton.styleFrom( 
-              backgroundColor: Colors.yellow, 
-              foregroundColor: Colors.black, 
-            ), 
-            ), 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+              ElevatedButton( 
+                onPressed: _deleteFile,
+                child: Text('Удалить файл'), 
+                style: ElevatedButton.styleFrom( 
+                  backgroundColor: Colors.yellow, 
+                  foregroundColor: Colors.black, 
+                ), 
+              ), 
+              const SizedBox(width: 6),
+              ElevatedButton( 
+                onPressed: _saveFile,
+                child: Text('Сохранить изменения'), 
+                style: ElevatedButton.styleFrom( 
+                  backgroundColor: Colors.yellow, 
+                  foregroundColor: Colors.black, 
+                ), 
+              ), 
+             ],
+            ),
           ], 
         ), 
       ), 
-
 
       bottomNavigationBar: BottomAppBar(
         child: Row(
@@ -156,20 +206,6 @@ class _ReaderPageState extends State<ReaderPage> {
       ),
       backgroundColor: const Color.fromARGB(234, 14, 14, 14),
     );
-  }
-
-  Future<void> _loadFile(String filePath) async {
-    File file = File(filePath); // Указываем путь к файлу
-    if (await file.exists()) { 
-      setState(() {
-        _currentFile = file; // Сохраняем текущий файл
-      });
-      await _readTxtFile(file); // Читаем содержимое файла
-    } else {
-      setState(() {
-        _statusMessage = 'Подождите немного и попробуйте снова';
-      });
-    }
   }
 
   Future<void> _readTxtFile(File file) async { 

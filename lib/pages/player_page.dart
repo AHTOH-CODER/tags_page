@@ -181,10 +181,10 @@ class _PlayerPageState extends State<PlayerPage> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        download_audio(idToUrl(widget.id), widget.id);
+                        download_audio(idToUrl(widget.id), widget.id, context);
                         showSnackBar(context, 'Это может занять некоторое время');
-                        await Future.delayed(Duration(seconds: 5));
-                        showSnackBar(context, 'Аудио успешно установлено');
+                        // await Future.delayed(Duration(seconds: 5));
+                        // showSnackBar(context, 'Аудио успешно установлено');
                         saveVideosToJson(history_videos);
                       },
                       child: const Text('Скачать аудио'),
@@ -196,10 +196,10 @@ class _PlayerPageState extends State<PlayerPage> {
                     const SizedBox(width: 6),
                     ElevatedButton(
                       onPressed: () async {
-                        download_video(idToUrl(widget.id), widget.id);
+                        download_video(idToUrl(widget.id), widget.id, context);
                         showSnackBar(context, 'Это может занять некоторое время');
-                        await Future.delayed(Duration(seconds: 5));
-                        showSnackBar(context, 'Видео успешно установлено');
+                        // await Future.delayed(Duration(seconds: 5));
+                        // showSnackBar(context, 'Видео успешно установлено');
                         saveVideosToJson(history_videos);
                       },
                       child: const Text('Скачать видео'),
@@ -212,28 +212,41 @@ class _PlayerPageState extends State<PlayerPage> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () async {
-                    download_text(idToUrl(widget.id), widget.id);
-                    showSnackBar(context, 'Это может занять некоторое время');
-                    await Future.delayed(Duration(seconds: 3));
-                    saveVideosToJson(history_videos);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReaderPage(
-                          id: widget.id,
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        download_text(idToUrl(widget.id), widget.id, context);
+                        showSnackBar(context, 'Это может занять некоторое время');
+                        saveVideosToJson(history_videos);
+                      },
+                      child: const Text('Скачать транскрибацию'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow,
+                        foregroundColor: Colors.black,
                       ),
-                    );
-                  },
-                  child: const Text('Читалка'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow,
-                    foregroundColor: Colors.black,
-                  ),
+                    ),
+                    const SizedBox(width: 6),
+                    ElevatedButton(
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReaderPage(
+                              id: widget.id,
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text('Читалка'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow,
+                        foregroundColor: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-
               ],
             ),
           ],

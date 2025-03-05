@@ -1,7 +1,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
+    
+    <!-- Разрешения для доступа к хранилищу -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    
+    <!-- Разрешения для доступа к медиафайлам -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    
+    <!-- Разрешения для доступа к камере -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- Разрешения для работы с уведомлениями -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <!-- Разрешения для доступа к медиа-плеерам -->
+    <uses-permission android:name="android.permission.BIND_MEDIA_SESSION"/>
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL"/>
+    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"/>
     <application
         android:label="test1"
         android:name="${applicationName}"
